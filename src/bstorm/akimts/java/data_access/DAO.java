@@ -8,6 +8,6 @@ public interface DAO<T, ID> {
     List<T> getAll();
     boolean insert(T toInsert);
     void update(ID id, T toInsert);
-    void delete(ID id);
+    boolean delete(ID id);
 
 }

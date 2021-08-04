@@ -2,10 +2,7 @@ package bstorm.akimts.java.data_access;
 
 import bstorm.akimts.java.models.Section;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +60,18 @@ public class SectionDAO implements DAO<Section, Long> {
     }
 
     @Override
-    public void delete(Long aLong) {
+    public boolean delete(Long aLong) {
 
+        try(
+            Connection co = ConnectionFactory.getConnection();
+             PreparedStatement ps = co.prepareStatement("DELETE FROM section WHERE section_id = ?");
+        ){
+            ps.setLong(1, aLong);
+            return 0 < ps.executeUpdate();
+        }
+        catch (SQLException ex){
+            throw new RuntimeException("couldnt delete : " + ex.getMessage());
+        }
     }
 
     private Section extractFromResult(ResultSet rs) throws SQLException {
